@@ -1,5 +1,4 @@
 import 'package:capstone_app/pages/home_page.dart';
-import 'package:capstone_app/pages/report.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -20,9 +19,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: HomePage(),
-      home: Report(),
-      theme: ThemeData(primarySwatch: Colors.green),
+      home: HomePage(),
+      // home: Report(),
+      theme: ThemeData(primarySwatch: Colors.purple),
     );
   }
 }

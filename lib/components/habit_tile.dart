@@ -48,7 +48,7 @@ class HabitTile extends StatelessWidget {
         child: Container(
           padding: EdgeInsets.all(18),
           decoration: BoxDecoration(
-            color: Colors.grey[100],
+            color: Colors.purple[100],
             borderRadius: BorderRadius.circular(12),
           ),
           child: Row(
@@ -62,17 +62,20 @@ class HabitTile extends StatelessWidget {
                     onChanged: onChanged,
                   ),
                   // habit name
-                  Text(habitName),
+                  Text(habitName,
+                  style: TextStyle(
+                    fontSize: 15,
+                  ),),
                 ],
               ),
 
               Container(
                 padding: EdgeInsets.all(7),
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: Colors.purple[200],
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(habitCategory!=null ? habitCategory :'fuckyou'),
+                child: Text(habitCategory!=null ? habitCategory :'category'),
               )
             ],
           ),
