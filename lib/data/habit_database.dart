@@ -9,6 +9,18 @@ class HabitDatabase {
   List todaysHabitList = [];
   // var todaysHabitList = List(3);
   Map<DateTime, int> heatMapDataSet = {};
+  double currStrength = 0;
+  // HabitDatabase({
+  //   required this.currStrength,
+  // });
+
+  void setStrength(double newValue) {
+    currStrength = newValue;
+  }
+
+  double getStrength() {
+    return todayPercent;
+  }
 
   // create initial default data
   void createDefaultData() {
@@ -52,8 +64,6 @@ class HabitDatabase {
     loadHeatMap();
   }
 
-  // int totalWeekHabit = 0;
-  // int weekHabit = 0;
   double todayPercent = 0.0;
   double getInt() {
     return todayPercent;
@@ -62,28 +72,26 @@ class HabitDatabase {
   void calculateHabitPercentages() {
     int countCompleted = 0;
     for (int i = 0; i < todaysHabitList.length; i++) {
-      // if (i % 7 == 0) {
-      //   totalWeekHabit = 0;
-      //   weekHabit = 0;
-      // }
-
       if (todaysHabitList[i][1] == true) {
         countCompleted++;
-        // weekHabit++;
       }
     }
-    
 
     String percent = todaysHabitList.isEmpty
         ? '0.0'
         : (countCompleted / todaysHabitList.length).toStringAsFixed(1);
 
+    String percent1 = todaysHabitList.isEmpty
+        ? '0.0'
+        : (countCompleted / todaysHabitList.length).toStringAsFixed(2);
+    todayPercent = double.parse(percent1);
+
     // key: "PERCENTAGE_SUMMARY_yyyymmdd"
     // value: string of 1dp number between 0.0-1.0 inclusive
     _myBox.put("PERCENTAGE_SUMMARY_${todaysDateFormatted()}", percent);
-  todayPercent = double.parse(percent);
+    
   }
-  
+
   void loadHeatMap() {
     DateTime startDate = createDateTimeObject(_myBox.get("START_DATE"));
 
@@ -111,13 +119,17 @@ class HabitDatabase {
 
       // day
       int day = startDate.add(Duration(days: i)).day;
+      // currStrength = strengthAsPercent ;
+      setStrength(strengthAsPercent);
 
       final percentForEachDay = <DateTime, int>{
         DateTime(year, month, day): (10 * strengthAsPercent).toInt(),
       };
 
       heatMapDataSet.addEntries(percentForEachDay.entries);
+      // heatMapDataSet.
       // print(heatMapDataSet);
+      // print(currStrength);
     }
   }
 }

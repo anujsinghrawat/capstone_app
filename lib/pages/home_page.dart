@@ -1,3 +1,5 @@
+import 'package:capstone_app/components/greet.dart';
+import 'package:capstone_app/components/today_details.dart';
 import 'package:capstone_app/data/habit_database.dart';
 import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -130,54 +132,53 @@ class _HomePageState extends State<HomePage> {
     db.updateDatabase();
   }
 
-  int index = 0;
+  
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey[300],
-      floatingActionButton: MyFloatingActionButton(onPressed: createNewHabit),
-      bottomNavigationBar: NavigationBarTheme(
-        data: NavigationBarThemeData(
-            // indicatorColor:
-            labelTextStyle: MaterialStateProperty.all(
-                const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))),
-        child: NavigationBar(
-          labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-          height: 60,
-          selectedIndex: index,
-          onDestinationSelected: (index) => setState(() => this.index = index),
-          destinations: const [
-            NavigationDestination(icon: Icon(Icons.home), label: 'home'),
-            NavigationDestination(icon: Icon(Icons.menu), label: 'menu')
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey[350],
+        floatingActionButton: MyFloatingActionButton(onPressed: createNewHabit),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        
+        body: ListView(
+          children: [
+
+            //greeting message
+            Greet(),
+
+            // monthly summary heat map
+            MonthlySummary(
+              datasets: db.heatMapDataSet,
+              startDate: _myBox.get("START_DATE"),
+            ),
+            // ElevatedButton.icon(onPressed: (){}, icon: Icon(Icons.report), label: Text("report")),
+
+
+            //today details
+            Today(percent: db.getStrength(),),
+
+            
+    
+            // list of habits
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: db.todaysHabitList.length,
+              itemBuilder: (context, index) {
+                return HabitTile(
+                  habitName: db.todaysHabitList[index][0],
+                  habitCategory: db.todaysHabitList[index][2],
+                  habitCompleted: db.todaysHabitList[index][1],
+                  onChanged: (value) => checkBoxTapped(value, index),
+                  settingsTapped: (context) => openHabitSettings(index),
+                  deleteTapped: (context) => deleteHabit(index),
+                );
+              },
+            )
           ],
         ),
-      ),
-      body: ListView(
-        children: [
-          // monthly summary heat map
-          MonthlySummary(
-            datasets: db.heatMapDataSet,
-            startDate: _myBox.get("START_DATE"),
-          ),
-
-          // list of habits
-          ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: db.todaysHabitList.length,
-            itemBuilder: (context, index) {
-              return HabitTile(
-                habitName: db.todaysHabitList[index][0],
-                habitCategory: db.todaysHabitList[index][2],
-                habitCompleted: db.todaysHabitList[index][1],
-                onChanged: (value) => checkBoxTapped(value, index),
-                settingsTapped: (context) => openHabitSettings(index),
-                deleteTapped: (context) => deleteHabit(index),
-              );
-            },
-          )
-        ],
       ),
     );
   }
