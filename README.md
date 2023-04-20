@@ -1,4 +1,4 @@
-# capstone_app
+# Habit tracker app
 A productivity app created with Flutter.
 
 For full working of app :- https://youtu.be/cihJCrT1KeM
